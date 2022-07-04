@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 export interface ButtonProps {
-  handleClick?: () => void;
+  onClick?: () => void;
   type?: 'button' | 'reset' | 'submit';
   fullWidth?: boolean;
   background?: string;

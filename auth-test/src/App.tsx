@@ -3,6 +3,14 @@ import { Routes, Route } from 'react-router-dom';
 
 import { routes } from './lib/routes';
 
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+  }
+`;
+
 function App() {
   const pages = useMemo(
     () =>
@@ -19,6 +27,7 @@ function App() {
 
   return (
     <div className="app">
+      <GlobalStyle />
       <Routes>{pages}</Routes>
     </div>
   );

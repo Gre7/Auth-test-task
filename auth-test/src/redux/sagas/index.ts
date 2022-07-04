@@ -1,28 +1,41 @@
-import { takeEvery, take, fork, call, put } from 'redux-saga/effects';
-import { setUser, userAuthData } from '../slices/userSlice';
+import { put, takeLatest, fork } from 'redux-saga/effects';
+import {
+  failedLoginUser,
+  successLoginUser,
+  successRecoveryUserPassword,
+  failedRecoveryUserPassword,
+} from '../slices/userSlice';
 import { USER_PHONE, USER_PASSWORD } from '../../lib/constants';
 
-export function* verifyLoginData(payload: userAuthData) {
-  const { phone, password } = payload;
-  console.log('payload: ', payload);
-
+//TODO типизировать
+export function* verifyLoginData(action: any) {
+  const { phone, password } = action.payload;
   if (phone === USER_PHONE && password === USER_PASSWORD) {
-    console.log('payload: ', payload);
-    yield put({ type: 'user/setUser', ...payload });
+    yield put(successLoginUser());
   } else {
-    throw new Error();
+    yield put(failedLoginUser());
   }
 }
 
-export function* workerSaga() {
-  const { payload } = yield take(setUser);
-  yield call(verifyLoginData, payload);
+//TODO типизировать
+export function* recoveryPassword(action: any) {
+  const phone = action.payload.phone;
+  if (phone === USER_PHONE) {
+    yield put(successRecoveryUserPassword());
+  } else {
+    yield put(failedRecoveryUserPassword());
+  }
 }
 
 export function* watchVerifyDataLoginSaga() {
-  yield takeEvery(setUser, workerSaga);
+  yield takeLatest('user/setUser', verifyLoginData);
+}
+
+export function* watchRecoveryPasswordUserLoginSaga() {
+  yield takeLatest('user/setRecoveryPasswordLogin', recoveryPassword);
 }
 
 export default function* rootSaga() {
   yield fork(watchVerifyDataLoginSaga);
+  yield fork(watchRecoveryPasswordUserLoginSaga);
 }

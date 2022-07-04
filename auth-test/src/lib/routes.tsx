@@ -1,3 +1,4 @@
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import MainPage from '../pages/MainPage/MainPage';
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
@@ -15,5 +16,9 @@ export const routes = [
   {
     path: '*',
     element: <NotFoundPage />,
+  },
+  {
+    path: '/passwordRecovery',
+    element: <ForgotPassword />,
   },
 ];

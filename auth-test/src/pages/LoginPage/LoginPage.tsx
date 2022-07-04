@@ -1,20 +1,27 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import AuthForm from '../../components/AuthForm';
 
-import Button from '../../components/Button';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAuth } from '../../hooks/useAuth';
 import { setUser } from '../../redux/slices/userSlice';
+import { StyledLoginPageContainer } from './LoginPageStyled';
+import { Navigate } from 'react-router-dom';
 import {
-  StyledLoginPageContainer,
-  StyledLoginPageForm,
-  StyledLoginPagePhoneInput,
-  StyledLoginPagePassInput,
-} from './LoginPageStyled';
+  StyledAuthFormPhoneInput,
+  StyledAuthFormPassInput,
+  StyledAuthFormForgotPassLink,
+} from '../../pages/LoginPage/LoginPageStyled';
+import Button from '../../components/Button';
+import { useAppSelector } from '../../hooks/useAppSelector';
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
 
-  const [phoneLogin, setPhoneLogin] = useState('');
+  const { isAuth, wrongUserData } = useAuth();
+
+  const { phone } = useAppSelector((state) => state.user);
+
+  const [phoneLogin, setPhoneLogin] = useState(phone);
   const [passLogin, setPassLogin] = useState('');
 
   const handleChangePassLogin = useCallback(
@@ -23,61 +30,83 @@ const LoginPage = () => {
     },
     []
   );
-  const state = useAppSelector((state) => state);
-  console.log('state: ', state);
+
+  const userData = useMemo(() => {
+    return { phone: phoneLogin, password: passLogin };
+  }, [passLogin, phoneLogin]);
 
   const handleSubmitLoginForm = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      const userData = { phone: phoneLogin, password: passLogin };
 
-      dispatch(setUser({ ...userData }));
+      try {
+        dispatch(setUser(userData));
+      } catch (e) {
+        console.log(e);
+      }
     },
-    [dispatch, passLogin, phoneLogin]
+    [dispatch, userData]
   );
 
   return (
     <StyledLoginPageContainer>
-      <StyledLoginPageForm onSubmit={handleSubmitLoginForm}>
-        <div className="logo">
-          <img src="../images/logo.jpg" alt="company logo"></img>
-        </div>
+      {isAuth ? (
+        <Navigate to="/" replace />
+      ) : (
+        <AuthForm handleSubmit={handleSubmitLoginForm}>
+          <div className="logo">
+            <img src="../images/logo.jpg" alt="company logo"></img>
+          </div>
 
-        <StyledLoginPagePhoneInput
-          country={'ru'}
-          value={phoneLogin}
-          onChange={(phone: string) => setPhoneLogin(phone)}
-          countryCodeEditable={false}
-          specialLabel="Введите логин"
-          inputProps={{
-            name: 'phone',
-            required: true,
-            autoFocus: true,
-          }}
-        />
+          <StyledAuthFormPhoneInput
+            country={'ru'}
+            value={phoneLogin}
+            onChange={(phone: string) => setPhoneLogin(phone)}
+            countryCodeEditable={false}
+            specialLabel="Введите логин"
+            inputProps={{
+              name: 'phone',
+              required: true,
+              autoFocus: true,
+            }}
+          />
+          {wrongUserData ? (
+            <span style={{ color: 'red' }}>Неверный логин или пароль</span>
+          ) : (
+            ''
+          )}
 
-        <StyledLoginPagePassInput
-          type="password"
-          withLabel
-          labelTitle="Введите пароль"
-          onChange={handleChangePassLogin}
-        />
+          <StyledAuthFormPassInput
+            type="password"
+            withLabel
+            labelTitle="Введите пароль"
+            onChange={handleChangePassLogin}
+          />
 
-        <div
-          className="forgot-password"
-          style={{
-            display: 'flex',
-            justifyContent: 'end',
-            alignItems: 'center',
-            marginBottom: '24px',
-          }}
-        >
-          <p style={{ color: '#F6B52E', cursor: 'pointer' }}>Забыли пароль?</p>
-        </div>
-        <Button fullWidth borderRadius="5px" padding="8px 0" type="submit">
-          ВОЙТИ
-        </Button>
-      </StyledLoginPageForm>
+          {wrongUserData ? (
+            <span style={{ color: 'red' }}>Неверный логин или пароль</span>
+          ) : (
+            ''
+          )}
+
+          <div
+            className="forgot-password"
+            style={{
+              display: 'flex',
+              justifyContent: 'end',
+              alignItems: 'center',
+              marginBottom: '24px',
+            }}
+          >
+            <StyledAuthFormForgotPassLink to="/passwordRecovery">
+              Забыли пароль?
+            </StyledAuthFormForgotPassLink>
+          </div>
+          <Button fullWidth borderRadius="5px" padding="8px 0" type="submit">
+            ВОЙТИ
+          </Button>
+        </AuthForm>
+      )}
     </StyledLoginPageContainer>
   );
 };
