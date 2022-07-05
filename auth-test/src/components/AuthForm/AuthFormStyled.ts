@@ -8,4 +8,5 @@ export const StyledAuthForm = styled('form')`
   border-radius: 20px;
   max-width: 412px;
   box-shadow: rgb(0 0 0 / 25%) -10px 7px 20px;
+  min-width: 263px;
 `;

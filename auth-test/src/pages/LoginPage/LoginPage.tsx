@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import AuthForm from '../../components/AuthForm';
 
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAuth } from '../../hooks/useAuth';
-import { setUser } from '../../redux/slices/userSlice';
+import { removeUser, setUser } from '../../redux/slices/userSlice';
 import { StyledLoginPageContainer } from './LoginPageStyled';
 import { Navigate } from 'react-router-dom';
 import {
@@ -23,6 +23,10 @@ const LoginPage = () => {
 
   const [phoneLogin, setPhoneLogin] = useState(phone);
   const [passLogin, setPassLogin] = useState('');
+
+  useEffect(() => {
+    dispatch(removeUser());
+  }, [dispatch]);
 
   const handleChangePassLogin = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

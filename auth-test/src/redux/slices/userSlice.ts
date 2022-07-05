@@ -18,6 +18,7 @@ const initialState: userAuthData = {
   wrongUserPhone: '',
 };
 
+//NOTE возможно, лучше вынести экшены в отдельный файл
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -38,6 +39,7 @@ const userSlice = createSlice({
       state.phone = null;
       state.password = null;
       state.isAuth = false;
+      state.wrongUserData = '';
     },
     setRecoveryPasswordLogin: (state, action) => {
       state.phone = action.payload.phone;
@@ -52,6 +54,7 @@ const userSlice = createSlice({
     },
     removeUserTemporaryPassword: (state) => {
       state.temporaryPassword = '';
+      state.wrongUserPhone = '';
     },
   },
 });

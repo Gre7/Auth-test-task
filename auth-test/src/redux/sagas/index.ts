@@ -1,14 +1,17 @@
 import { put, takeLatest, fork } from 'redux-saga/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
+
+import { USER_PHONE, USER_PASSWORD } from '../../lib/constants';
 import {
   failedLoginUser,
   successLoginUser,
   successRecoveryUserPassword,
   failedRecoveryUserPassword,
 } from '../slices/userSlice';
-import { USER_PHONE, USER_PASSWORD } from '../../lib/constants';
 
-//TODO типизировать
-export function* verifyLoginData(action: any) {
+export function* verifyLoginData(
+  action: PayloadAction<{ phone: string | null; password: string | null }>
+) {
   const { phone, password } = action.payload;
   if (phone === USER_PHONE && password === USER_PASSWORD) {
     yield put(successLoginUser());
@@ -17,8 +20,9 @@ export function* verifyLoginData(action: any) {
   }
 }
 
-//TODO типизировать
-export function* recoveryPassword(action: any) {
+export function* recoveryPassword(
+  action: PayloadAction<{ phone: string | null }>
+) {
   const phone = action.payload.phone;
   if (phone === USER_PHONE) {
     yield put(successRecoveryUserPassword());
