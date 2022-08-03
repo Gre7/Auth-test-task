@@ -18,7 +18,6 @@ const initialState: userAuthData = {
   wrongUserPhone: '',
 };
 
-//NOTE возможно, лучше вынести экшены в отдельный файл
 const userSlice = createSlice({
   name: 'user',
   initialState,

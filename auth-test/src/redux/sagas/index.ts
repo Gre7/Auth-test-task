@@ -31,15 +31,11 @@ export function* recoveryPassword(
   }
 }
 
-export function* watchVerifyDataLoginSaga() {
+export function* watchAuth() {
   yield takeLatest('user/setUser', verifyLoginData);
-}
-
-export function* watchRecoveryPasswordUserLoginSaga() {
   yield takeLatest('user/setRecoveryPasswordLogin', recoveryPassword);
 }
 
 export default function* rootSaga() {
-  yield fork(watchVerifyDataLoginSaga);
-  yield fork(watchRecoveryPasswordUserLoginSaga);
+  yield fork(watchAuth);
 }

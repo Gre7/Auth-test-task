@@ -30,11 +30,7 @@ const ForgotPassword = () => {
     (e: React.FormEvent) => {
       e.preventDefault();
 
-      try {
-        dispatch(setRecoveryPasswordLogin({ phone: phoneLogin }));
-      } catch (e) {
-        console.log(e);
-      }
+      dispatch(setRecoveryPasswordLogin({ phone: phoneLogin }));
     },
     [dispatch, phoneLogin]
   );

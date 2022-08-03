@@ -43,11 +43,7 @@ const LoginPage = () => {
     (e: React.FormEvent) => {
       e.preventDefault();
 
-      try {
-        dispatch(setUser(userData));
-      } catch (e) {
-        console.log(e);
-      }
+      dispatch(setUser(userData));
     },
     [dispatch, userData]
   );

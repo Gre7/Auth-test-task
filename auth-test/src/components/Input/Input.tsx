@@ -14,14 +14,13 @@ const Input = ({
       return (
         <input type={type} className={className} onChange={onChange}></input>
       );
-    } else {
-      return (
-        <StyledInputLabel>
-          {labelTitle ? labelTitle : ''}
-          <input type={type} onChange={onChange} className={className}></input>
-        </StyledInputLabel>
-      );
     }
+    return (
+      <StyledInputLabel>
+        {labelTitle ? labelTitle : ''}
+        <input type={type} onChange={onChange} className={className}></input>
+      </StyledInputLabel>
+    );
   }, [className, onChange, labelTitle, type, withLabel]);
 
   return <>{input}</>;

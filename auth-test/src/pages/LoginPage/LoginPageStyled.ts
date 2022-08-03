@@ -13,7 +13,7 @@ export const StyledLoginPageContainer = styled('div')`
   height: 100vh;
   min-width: 263px;
 
-  @media (min-width: 1440px) {
+  @media (min-width: 1700px) {
     background: #eeeff4;
   }
 
